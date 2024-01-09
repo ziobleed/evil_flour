@@ -1,3 +1,4 @@
+import 'package:evil_flour/product_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -11,7 +12,8 @@ class ScannerPage extends StatefulWidget {
 }
 
 class _ScannerPageState extends State<ScannerPage> {
-  String? _scanCode;
+  String _scanCode = '';
+
   final qrKey = GlobalKey();
   String qrData = 'Hello! Buddy';
 
@@ -22,7 +24,7 @@ class _ScannerPageState extends State<ScannerPage> {
     return Scaffold(
       appBar: AppBar(title: const Text("Lettura codice QR"), centerTitle: true),
       body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        _scanCode == null
+        _scanCode.isEmpty
             ? SizedBox()
             : Text(
                 "Scanned Code -  $_scanCode",
@@ -36,12 +38,12 @@ class _ScannerPageState extends State<ScannerPage> {
             child: RepaintBoundary(
           key: qrKey,
           child: QrImageView(
-            data: qrData,
+            data: _scanCode,
             size: 250,
-            backgroundColor: Colors.red,
-            gapless: false,
+            backgroundColor: Colors.white30,
+            gapless: true,
             eyeStyle: const QrEyeStyle(
-                color: Colors.green, eyeShape: QrEyeShape.circle),
+                color: Colors.black, eyeShape: QrEyeShape.square),
             version: QrVersions.auto,
           ),
         )),
@@ -49,7 +51,18 @@ class _ScannerPageState extends State<ScannerPage> {
             onPressed: () {
               scanQR();
             },
-            child: Text("Scan Code"))
+            child: Text("Scan Code")),
+        ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProductDetail(
+                          productId: _scanCode,
+                        )),
+              );
+            },
+            child: Text("Show product detail")),
       ]),
     );
   }
