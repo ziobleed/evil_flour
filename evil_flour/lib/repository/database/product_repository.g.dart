@@ -3,57 +3,57 @@
 part of 'product_repository.dart';
 
 // ignore_for_file: type=lint
-class $ProductTable extends Product with TableInfo<$ProductTable, ProductData>{
+class $TableProductTable extends TableProduct with TableInfo<$TableProductTable, TableProductData>{
 @override final GeneratedDatabase attachedDatabase;
 final String? _alias;
-$ProductTable(this.attachedDatabase, [this._alias]);
+$TableProductTable(this.attachedDatabase, [this._alias]);
 @override
 List<GeneratedColumn> get $columns => [];
 @override
 String get aliasedName => _alias ?? actualTableName;
 @override
  String get actualTableName => $name;
-static const String $name = 'product';
+static const String $name = 'table_product';
 @override
-VerificationContext validateIntegrity(Insertable<ProductData> instance, {bool isInserting = false}) {
+VerificationContext validateIntegrity(Insertable<TableProductData> instance, {bool isInserting = false}) {
 final context = VerificationContext();
 final data = instance.toColumns(true);
 return context;
 }
 @override
-Set<GeneratedColumn> get $primaryKey => const {};@override ProductData map(Map<String, dynamic> data, {String? tablePrefix})  {
-final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';return ProductData();
+Set<GeneratedColumn> get $primaryKey => const {};@override TableProductData map(Map<String, dynamic> data, {String? tablePrefix})  {
+final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';return TableProductData();
 }
 @override
-$ProductTable createAlias(String alias) {
-return $ProductTable(attachedDatabase, alias);}}class ProductData extends DataClass implements Insertable<ProductData> {
-const ProductData({});@override
+$TableProductTable createAlias(String alias) {
+return $TableProductTable(attachedDatabase, alias);}}class TableProductData extends DataClass implements Insertable<TableProductData> {
+const TableProductData({});@override
 Map<String, Expression> toColumns(bool nullToAbsent) {
 final map = <String, Expression> {};return map; 
 }
-ProductCompanion toCompanion(bool nullToAbsent) {
-return ProductCompanion();
+TableProductCompanion toCompanion(bool nullToAbsent) {
+return TableProductCompanion();
 }
-factory ProductData.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+factory TableProductData.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
 serializer ??= driftRuntimeOptions.defaultSerializer;
-return ProductData();}
+return TableProductData();}
 @override Map<String, dynamic> toJson({ValueSerializer? serializer}) {
 serializer ??= driftRuntimeOptions.defaultSerializer;
 return <String, dynamic>{
-};}ProductData copyWith({}) => ProductData();@override
-String toString() {return (StringBuffer('ProductData(')..write(')')).toString();}
+};}TableProductData copyWith({}) => TableProductData();@override
+String toString() {return (StringBuffer('TableProductData(')..write(')')).toString();}
 @override
  int get hashCode => identityHashCode(this);@override
-bool operator ==(Object other) => identical(this, other) || (other is ProductData);
-}class ProductCompanion extends UpdateCompanion<ProductData> {
+bool operator ==(Object other) => identical(this, other) || (other is TableProductData);
+}class TableProductCompanion extends UpdateCompanion<TableProductData> {
 final Value<int> rowid;
-const ProductCompanion({this.rowid = const Value.absent(),});
-ProductCompanion.insert({this.rowid = const Value.absent(),});
-static Insertable<ProductData> custom({Expression<int>? rowid, 
+const TableProductCompanion({this.rowid = const Value.absent(),});
+TableProductCompanion.insert({this.rowid = const Value.absent(),});
+static Insertable<TableProductData> custom({Expression<int>? rowid, 
 }) {
 return RawValuesInsertable({if (rowid != null)'rowid': rowid,});
-}ProductCompanion copyWith({Value<int>? rowid}) {
-return ProductCompanion(rowid: rowid ?? this.rowid,);
+}TableProductCompanion copyWith({Value<int>? rowid}) {
+return TableProductCompanion(rowid: rowid ?? this.rowid,);
 }
 @override
 Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -62,59 +62,59 @@ map['rowid'] = Variable<int>(rowid.value);}
 return map; 
 }
 @override
-String toString() {return (StringBuffer('ProductCompanion(')..write('rowid: $rowid')..write(')')).toString();}
+String toString() {return (StringBuffer('TableProductCompanion(')..write('rowid: $rowid')..write(')')).toString();}
 }
-class $FlourTable extends Flour with TableInfo<$FlourTable, FlourData>{
+class $TableFlourTable extends TableFlour with TableInfo<$TableFlourTable, TableFlourData>{
 @override final GeneratedDatabase attachedDatabase;
 final String? _alias;
-$FlourTable(this.attachedDatabase, [this._alias]);
+$TableFlourTable(this.attachedDatabase, [this._alias]);
 @override
 List<GeneratedColumn> get $columns => [];
 @override
 String get aliasedName => _alias ?? actualTableName;
 @override
  String get actualTableName => $name;
-static const String $name = 'flour';
+static const String $name = 'table_flour';
 @override
-VerificationContext validateIntegrity(Insertable<FlourData> instance, {bool isInserting = false}) {
+VerificationContext validateIntegrity(Insertable<TableFlourData> instance, {bool isInserting = false}) {
 final context = VerificationContext();
 final data = instance.toColumns(true);
 return context;
 }
 @override
-Set<GeneratedColumn> get $primaryKey => const {};@override FlourData map(Map<String, dynamic> data, {String? tablePrefix})  {
-final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';return FlourData();
+Set<GeneratedColumn> get $primaryKey => const {};@override TableFlourData map(Map<String, dynamic> data, {String? tablePrefix})  {
+final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';return TableFlourData();
 }
 @override
-$FlourTable createAlias(String alias) {
-return $FlourTable(attachedDatabase, alias);}}class FlourData extends DataClass implements Insertable<FlourData> {
-const FlourData({});@override
+$TableFlourTable createAlias(String alias) {
+return $TableFlourTable(attachedDatabase, alias);}}class TableFlourData extends DataClass implements Insertable<TableFlourData> {
+const TableFlourData({});@override
 Map<String, Expression> toColumns(bool nullToAbsent) {
 final map = <String, Expression> {};return map; 
 }
-FlourCompanion toCompanion(bool nullToAbsent) {
-return FlourCompanion();
+TableFlourCompanion toCompanion(bool nullToAbsent) {
+return TableFlourCompanion();
 }
-factory FlourData.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+factory TableFlourData.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
 serializer ??= driftRuntimeOptions.defaultSerializer;
-return FlourData();}
+return TableFlourData();}
 @override Map<String, dynamic> toJson({ValueSerializer? serializer}) {
 serializer ??= driftRuntimeOptions.defaultSerializer;
 return <String, dynamic>{
-};}FlourData copyWith({}) => FlourData();@override
-String toString() {return (StringBuffer('FlourData(')..write(')')).toString();}
+};}TableFlourData copyWith({}) => TableFlourData();@override
+String toString() {return (StringBuffer('TableFlourData(')..write(')')).toString();}
 @override
  int get hashCode => identityHashCode(this);@override
-bool operator ==(Object other) => identical(this, other) || (other is FlourData);
-}class FlourCompanion extends UpdateCompanion<FlourData> {
+bool operator ==(Object other) => identical(this, other) || (other is TableFlourData);
+}class TableFlourCompanion extends UpdateCompanion<TableFlourData> {
 final Value<int> rowid;
-const FlourCompanion({this.rowid = const Value.absent(),});
-FlourCompanion.insert({this.rowid = const Value.absent(),});
-static Insertable<FlourData> custom({Expression<int>? rowid, 
+const TableFlourCompanion({this.rowid = const Value.absent(),});
+TableFlourCompanion.insert({this.rowid = const Value.absent(),});
+static Insertable<TableFlourData> custom({Expression<int>? rowid, 
 }) {
 return RawValuesInsertable({if (rowid != null)'rowid': rowid,});
-}FlourCompanion copyWith({Value<int>? rowid}) {
-return FlourCompanion(rowid: rowid ?? this.rowid,);
+}TableFlourCompanion copyWith({Value<int>? rowid}) {
+return TableFlourCompanion(rowid: rowid ?? this.rowid,);
 }
 @override
 Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -123,12 +123,12 @@ map['rowid'] = Variable<int>(rowid.value);}
 return map; 
 }
 @override
-String toString() {return (StringBuffer('FlourCompanion(')..write('rowid: $rowid')..write(')')).toString();}
+String toString() {return (StringBuffer('TableFlourCompanion(')..write('rowid: $rowid')..write(')')).toString();}
 }
-class $ProductFlourTable extends ProductFlour with TableInfo<$ProductFlourTable, ProductFlour>{
+class $TableProductFlourTable extends TableProductFlour with TableInfo<$TableProductFlourTable, TableProductFlourData>{
 @override final GeneratedDatabase attachedDatabase;
 final String? _alias;
-$ProductFlourTable(this.attachedDatabase, [this._alias]);
+$TableProductFlourTable(this.attachedDatabase, [this._alias]);
 static const VerificationMeta _productMeta = const VerificationMeta('product');
 @override
 late final GeneratedColumn<int> product = GeneratedColumn<int>('product', aliasedName, false, type: DriftSqlType.int, requiredDuringInsert: true);
@@ -141,9 +141,9 @@ List<GeneratedColumn> get $columns => [product, flour];
 String get aliasedName => _alias ?? actualTableName;
 @override
  String get actualTableName => $name;
-static const String $name = 'product_flour';
+static const String $name = 'table_product_flour';
 @override
-VerificationContext validateIntegrity(Insertable<ProductFlour> instance, {bool isInserting = false}) {
+VerificationContext validateIntegrity(Insertable<TableProductFlourData> instance, {bool isInserting = false}) {
 final context = VerificationContext();
 final data = instance.toColumns(true);
 if (data.containsKey('product')) {
@@ -157,47 +157,47 @@ context.missing(_flourMeta);
 return context;
 }
 @override
-Set<GeneratedColumn> get $primaryKey => const {};@override ProductFlour map(Map<String, dynamic> data, {String? tablePrefix})  {
-final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';return ProductFlour(product: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}product'])!, flour: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}flour'])!, );
+Set<GeneratedColumn> get $primaryKey => const {};@override TableProductFlourData map(Map<String, dynamic> data, {String? tablePrefix})  {
+final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';return TableProductFlourData(product: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}product'])!, flour: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}flour'])!, );
 }
 @override
-$ProductFlourTable createAlias(String alias) {
-return $ProductFlourTable(attachedDatabase, alias);}}class ProductFlour extends DataClass implements Insertable<ProductFlour> {
+$TableProductFlourTable createAlias(String alias) {
+return $TableProductFlourTable(attachedDatabase, alias);}}class TableProductFlourData extends DataClass implements Insertable<TableProductFlourData> {
 final int product;
 final int flour;
-const ProductFlour({required this.product, required this.flour});@override
+const TableProductFlourData({required this.product, required this.flour});@override
 Map<String, Expression> toColumns(bool nullToAbsent) {
 final map = <String, Expression> {};map['product'] = Variable<int>(product);
 map['flour'] = Variable<int>(flour);
 return map; 
 }
-ProductFlourCompanion toCompanion(bool nullToAbsent) {
-return ProductFlourCompanion(product: Value(product),flour: Value(flour),);
+TableProductFlourCompanion toCompanion(bool nullToAbsent) {
+return TableProductFlourCompanion(product: Value(product),flour: Value(flour),);
 }
-factory ProductFlour.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+factory TableProductFlourData.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
 serializer ??= driftRuntimeOptions.defaultSerializer;
-return ProductFlour(product: serializer.fromJson<int>(json['product']),flour: serializer.fromJson<int>(json['flour']),);}
+return TableProductFlourData(product: serializer.fromJson<int>(json['product']),flour: serializer.fromJson<int>(json['flour']),);}
 @override Map<String, dynamic> toJson({ValueSerializer? serializer}) {
 serializer ??= driftRuntimeOptions.defaultSerializer;
 return <String, dynamic>{
-'product': serializer.toJson<int>(product),'flour': serializer.toJson<int>(flour),};}ProductFlour copyWith({int? product,int? flour}) => ProductFlour(product: product ?? this.product,flour: flour ?? this.flour,);@override
-String toString() {return (StringBuffer('ProductFlour(')..write('product: $product, ')..write('flour: $flour')..write(')')).toString();}
+'product': serializer.toJson<int>(product),'flour': serializer.toJson<int>(flour),};}TableProductFlourData copyWith({int? product,int? flour}) => TableProductFlourData(product: product ?? this.product,flour: flour ?? this.flour,);@override
+String toString() {return (StringBuffer('TableProductFlourData(')..write('product: $product, ')..write('flour: $flour')..write(')')).toString();}
 @override
  int get hashCode => Object.hash(product, flour);@override
-bool operator ==(Object other) => identical(this, other) || (other is ProductFlour && other.product == this.product && other.flour == this.flour);
-}class ProductFlourCompanion extends UpdateCompanion<ProductFlour> {
+bool operator ==(Object other) => identical(this, other) || (other is TableProductFlourData && other.product == this.product && other.flour == this.flour);
+}class TableProductFlourCompanion extends UpdateCompanion<TableProductFlourData> {
 final Value<int> product;
 final Value<int> flour;
 final Value<int> rowid;
-const ProductFlourCompanion({this.product = const Value.absent(),this.flour = const Value.absent(),this.rowid = const Value.absent(),});
-ProductFlourCompanion.insert({required int product,required int flour,this.rowid = const Value.absent(),}): product = Value(product), flour = Value(flour);
-static Insertable<ProductFlour> custom({Expression<int>? product, 
+const TableProductFlourCompanion({this.product = const Value.absent(),this.flour = const Value.absent(),this.rowid = const Value.absent(),});
+TableProductFlourCompanion.insert({required int product,required int flour,this.rowid = const Value.absent(),}): product = Value(product), flour = Value(flour);
+static Insertable<TableProductFlourData> custom({Expression<int>? product, 
 Expression<int>? flour, 
 Expression<int>? rowid, 
 }) {
 return RawValuesInsertable({if (product != null)'product': product,if (flour != null)'flour': flour,if (rowid != null)'rowid': rowid,});
-}ProductFlourCompanion copyWith({Value<int>? product, Value<int>? flour, Value<int>? rowid}) {
-return ProductFlourCompanion(product: product ?? this.product,flour: flour ?? this.flour,rowid: rowid ?? this.rowid,);
+}TableProductFlourCompanion copyWith({Value<int>? product, Value<int>? flour, Value<int>? rowid}) {
+return TableProductFlourCompanion(product: product ?? this.product,flour: flour ?? this.flour,rowid: rowid ?? this.rowid,);
 }
 @override
 Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -210,15 +210,20 @@ map['rowid'] = Variable<int>(rowid.value);}
 return map; 
 }
 @override
-String toString() {return (StringBuffer('ProductFlourCompanion(')..write('product: $product, ')..write('flour: $flour, ')..write('rowid: $rowid')..write(')')).toString();}
+String toString() {return (StringBuffer('TableProductFlourCompanion(')..write('product: $product, ')..write('flour: $flour, ')..write('rowid: $rowid')..write(')')).toString();}
 }
 abstract class _$ProductRepository extends GeneratedDatabase{
 _$ProductRepository(QueryExecutor e): super(e);
-late final $ProductTable product = $ProductTable(this);
-late final $FlourTable flour = $FlourTable(this);
-late final $ProductFlourTable productFlour = $ProductFlourTable(this);
+late final $TableProductTable tableProduct = $TableProductTable(this);
+late final $TableFlourTable tableFlour = $TableFlourTable(this);
+late final $TableProductFlourTable tableProductFlour = $TableProductFlourTable(this);
+late final ProductDao productDao = ProductDao(this as ProductRepository);
 @override
 Iterable<TableInfo<Table, Object?>> get allTables => allSchemaEntities.whereType<TableInfo<Table, Object?>>();
 @override
-List<DatabaseSchemaEntity> get allSchemaEntities => [product, flour, productFlour];
+List<DatabaseSchemaEntity> get allSchemaEntities => [tableProduct, tableFlour, tableProductFlour];
+}
+mixin _$ProductDaoMixin on DatabaseAccessor<ProductRepository> {
+$TableProductTable get tableProduct =>
+attachedDatabase.tableProduct;
 }
