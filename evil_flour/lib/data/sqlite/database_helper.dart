@@ -100,4 +100,29 @@ class DatabaseHelper {
     await database;
     return _streamDatabase;
   }
+
+  // Add parseProduct_items
+  List<ProductItem> parseProductItems(List<Map<String, dynamic>> productList) {
+    List<ProductItem> products = <ProductItem>[];
+    for (final Map<String, dynamic> currJsonProductItem in productList) {
+      final ProductItem productItem = ProductItem.fromJson(currJsonProductItem);
+      products.add(productItem);
+    }
+    return products;
+  }
+
+  // Add parseFlours
+  List<Flour> parseFlours(List<Map<String, dynamic>> flourList) {
+    List<Flour> flours = <Flour>[];
+    for (final Map<String, dynamic> currJsonFlour in flourList) {
+      final Flour flour = Flour.fromJson(currJsonFlour);
+      flours.add(flour);
+    }
+    return flours;
+  }
+
+  // metodo parseFlours scritto in modo piu sintetico usando stream con map
+  List<Flour> parseFlours2(List<Map<String, dynamic>> flourList) {
+    return flourList.map((json) => Flour.fromJson(json)).toList();
+  }
 }
