@@ -17,4 +17,18 @@ class Flour {
         name: name ?? this.name,
         description: description ?? this.description);
   }
+
+  // Create a Flour from JSON data
+  factory Flour.fromJson(Map<String, dynamic> json) => Flour(
+        id: json['id'],
+        name: json['name'],
+        description: json['description'],
+      );
+
+  // Flour to JSON
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'id': id,
+        'name': name,
+        'description': description,
+      };
 }

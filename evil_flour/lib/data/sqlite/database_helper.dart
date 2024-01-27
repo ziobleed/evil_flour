@@ -94,4 +94,10 @@ class DatabaseHelper {
     });
     return _streamDatabase;
   }
+
+  // getter per il database nella sua versione "Stream"
+  Future<BriteDatabase> get streamDatabase async {
+    await database;
+    return _streamDatabase;
+  }
 }

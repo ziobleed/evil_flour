@@ -28,4 +28,22 @@ class ProductItem {
         name: name ?? this.name,
         description: description ?? this.description);
   }
+
+  // Create a ProductItem from JSON data
+  factory ProductItem.fromJson(Map<String, dynamic> json) => ProductItem(
+        id: json['id'],
+        barcode: json['barcode'],
+        name: json['name'],
+        description: json['description'],
+      );
+
+  // ProductItem to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'barcode': barcode,
+      'name': name,
+      'description': description,
+    };
+  }
 }
