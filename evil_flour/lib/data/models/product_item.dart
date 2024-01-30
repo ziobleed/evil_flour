@@ -46,4 +46,14 @@ class ProductItem {
       'description': description,
     };
   }
+
+  // produce prodotti comprensivi di flour purché il json contenga le colonne giuste
+  factory ProductItem.fromJsonWithFlours(Map<String, dynamic> json) {
+    return ProductItem(
+      id: json['id'],
+      barcode: json['barcode'],
+      name: json['name'],
+      description: json['description'],
+    );
+  }
 }

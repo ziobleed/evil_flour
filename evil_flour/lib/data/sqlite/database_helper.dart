@@ -11,7 +11,7 @@ class DatabaseHelper {
   static const _databaseVersion = 1;
 
   // tables names
-  static const producTable = 'Product';
+  static const productTable = 'Product';
   static const flourTable = 'Flour';
   static const productFlourTable = 'Product_Flour';
   static const productId = 'productId';
@@ -35,7 +35,7 @@ class DatabaseHelper {
   Future _onCreate(Database db, int version) async {
     // crea la tabella Product
     await db.execute('''
-          CREATE TABLE $producTable (
+          CREATE TABLE $productTable (
             $productId INTEGER PRIMARY KEY,
             barcode TEXT,
             name TEXT,
@@ -45,7 +45,7 @@ class DatabaseHelper {
 
     // crea la tabella Flour
     await db.execute('''
-          CREATE TABLE $productFlourTable (
+          CREATE TABLE $flourTable (
             $flourId INTEGER PRIMARY KEY,
             name TEXT,
             description TEXT
@@ -55,8 +55,8 @@ class DatabaseHelper {
     // crea la tabella di raccordo molti a molti Product_Flour
     await db.execute('''
           CREATE TABLE $productFlourTable (
-            $productId INTEGER REFERENCES $producTable($productId),
-            $flourId INTEGER REFERENCES $productFlourTable($flourId)
+            $productId INTEGER REFERENCES $productTable($productId),
+            $flourId INTEGER REFERENCES $flourTable($flourId)
           )
       ''');
   }
@@ -101,11 +101,49 @@ class DatabaseHelper {
     return _streamDatabase;
   }
 
-  // Add parseProduct_items
-  List<ProductItem> parseProductItems(List<Map<String, dynamic>> productList) {
+  List<ProductItem> parseProductItemsWithFlours(
+      List<Map<String, dynamic>> productList) {
+    // l'obiettivo è leggere un json che ha
+    // - un prodotto
+    // - una sua farina associata
+    // Poiché un prodotto può avere più farine, più righe json possono afferire
+    // allo stesso prodotto ma farina diversa.
+    // Quindi per recuperare un prodotto che già ho iniziato a valorizzare
+    // lo metto in una mappa e uso il product id per recuperarlo
+    // poi gli aggiungo la farina
+
+    Map<int, ProductItem> productsMap = {};
+    for (final Map<String, dynamic> currJson in productList) {
+      int currProductId = currJson['productId'];
+      // se il prodotto non è nella mappa, lo creo leggendo parte del json e
+      // lo inserisco nella mappa
+
+      if (productsMap[currProductId] == null) {
+        productsMap[currProductId] = ProductItem(
+            id: currJson['productId'],
+            barcode: currJson['barcode'],
+            name: currJson['productName'],
+            description: currJson['productDescription']);
+      }
+      // estraggo il prodotto dalla mappa dei prodotti e ci aggiungo la farina
+      ProductItem currProduct = productsMap[currProductId]!;
+      // creo la farina
+      Flour currFlour = Flour(
+          id: currJson['flourId'],
+          name: currJson['flourName'],
+          description: currJson['flourDescription']);
+      // la aggiungo al prodotto
+      currProduct.flours.add(currFlour);
+    }
+    // traduco in lista il contenuto della mappa dei prodotti
+    return productsMap.entries.map((entry) => entry.value).toList();
+  }
+
+  List<ProductItem> parseProductItemsWithFlours(
+      List<Map<String, dynamic>> productListWithFlours) {
     List<ProductItem> products = <ProductItem>[];
-    for (final Map<String, dynamic> currJsonProductItem in productList) {
-      final ProductItem productItem = ProductItem.fromJson(currJsonProductItem);
+    for (final Map<String, dynamic> currJson in productListWithFlours) {
+      final ProductItem productItem = ProductItem.fromJson(currJson);
       products.add(productItem);
     }
     return products;
@@ -124,5 +162,50 @@ class DatabaseHelper {
   // metodo parseFlours scritto in modo piu sintetico usando stream con map
   List<Flour> parseFlours2(List<Map<String, dynamic>> flourList) {
     return flourList.map((json) => Flour.fromJson(json)).toList();
+  }
+
+  Future<List<ProductItem>> findAllProducts() async {
+    final BriteDatabase db = await instance.streamDatabase;
+    List<Map<String, dynamic>> productList = await db.query(productTable);
+    return parseProductItems(productList);
+  }
+
+  Future<List<Flour>> findAllFlours() async {
+    final BriteDatabase db = await instance.streamDatabase;
+    List<Map<String, dynamic>> flourList = await db.query(flourTable);
+    return parseFlours(flourList);
+  }
+
+  Stream<List<ProductItem>> watchAllProducts() async* {
+    final BriteDatabase db = await instance.streamDatabase;
+    yield* db
+        .createQuery(productTable)
+        .mapToList((row) => ProductItem.fromJson(row));
+  }
+
+  Stream<List<Flour>> watchAllFlours() async* {
+    final BriteDatabase db = await instance.streamDatabase;
+    yield* db.createQuery(flourTable).mapToList((row) => Flour.fromJson(row));
+  }
+
+  Future<List<ProductItem>> findProductsWithFlours(int productId) async {
+    String query = '''
+      SELECT 
+        p.$productId AS productId,
+        p.barcode AS barcode,
+        p.name AS productName,
+        p.description AS productDescription,
+        f.$flourId AS flourId,
+        f.name AS flourName,
+        f.description AS flourDescription
+      FROM $productTable p
+        JOIN $productFlourTable pf ON p.$productId = pf.$productId
+        JOIN $flourTable f ON pf.$flourId = f.$flourId
+    GROUP BY p.$productId
+    ORDER BY p.name
+    ''';
+    final BriteDatabase db = await instance.streamDatabase;
+    List<Map<String, dynamic>> productsWithFloursList =
+        await db.rawQuery(query);
   }
 }
