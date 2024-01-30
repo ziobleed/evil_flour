@@ -117,14 +117,12 @@ class DatabaseHelper {
       int currProductId = currJson['productId'];
       // se il prodotto non è nella mappa, lo creo leggendo parte del json e
       // lo inserisco nella mappa
+      productsMap[currProductId] ??= ProductItem(
+          id: currJson['productId'],
+          barcode: currJson['barcode'],
+          name: currJson['productName'],
+          description: currJson['productDescription']);
 
-      if (productsMap[currProductId] == null) {
-        productsMap[currProductId] = ProductItem(
-            id: currJson['productId'],
-            barcode: currJson['barcode'],
-            name: currJson['productName'],
-            description: currJson['productDescription']);
-      }
       // estraggo il prodotto dalla mappa dei prodotti e ci aggiungo la farina
       ProductItem currProduct = productsMap[currProductId]!;
       // creo la farina
@@ -139,7 +137,7 @@ class DatabaseHelper {
     return productsMap.entries.map((entry) => entry.value).toList();
   }
 
-  List<ProductItem> parseProductItemsWithFlours(
+  List<ProductItem> parseProductItems(
       List<Map<String, dynamic>> productListWithFlours) {
     List<ProductItem> products = <ProductItem>[];
     for (final Map<String, dynamic> currJson in productListWithFlours) {
