@@ -163,12 +163,6 @@ class DatabaseHelper {
     return flourList.map((json) => Flour.fromJson(json)).toList();
   }
 
-  Future<List<ProductItem>> findAllProducts() async {
-    final BriteDatabase db = await instance.streamDatabase;
-    List<Map<String, dynamic>> productList = await db.query(productTable);
-    return parseProductItems(productList);
-  }
-
   Future<List<Flour>> findAllFlours() async {
     final BriteDatabase db = await instance.streamDatabase;
     List<Map<String, dynamic>> flourList = await db.query(flourTable);
@@ -187,7 +181,7 @@ class DatabaseHelper {
     yield* db.createQuery(flourTable).mapToList((row) => Flour.fromJson(row));
   }
 
-  Future<List<ProductItem>> findProductsWithFlours(int productId) async {
+  Future<List<ProductItem>> findAllProducts() async {
     String query = '''
       SELECT 
         p.$productId AS productId,
@@ -211,6 +205,34 @@ class DatabaseHelper {
     return productsWithFloursList
         .map((json) => ProductItem.fromJsonWithFlours(json))
         .toList();
+  }
+
+  Future<ProductItem> findProductById(int id) async {
+    String query = '''
+      SELECT 
+        p.$productId AS productId,
+        p.barcode AS barcode,
+        p.name AS productName,
+        p.description AS productDescription,
+        f.$flourId AS flourId,
+        f.name AS flourName,
+        f.description AS flourDescription
+      FROM $productTable p
+        JOIN $productFlourTable pf ON p.$productId = pf.$productId
+        JOIN $flourTable f ON pf.$flourId = f.$flourId
+      WHERE p.$productId  = $id
+    GROUP BY p.$productId
+    ORDER BY p.name
+    ''';
+    final BriteDatabase db = await instance.streamDatabase;
+    List<Map<String, dynamic>> productWithFlours = await db.rawQuery(query);
+    if (productWithFlours.isEmpty) {
+      throw Exception("Prodotto con id $id non trovato");
+    }
+    // mi aspetto un solo elemento
+    Map<String, dynamic> productJson = productWithFlours.first;
+    // trasformo i json ottenuti dal db in ProductItems
+    return ProductItem.fromJsonWithFlours(productJson);
   }
 
   // metodo generico per inserire un record semplice in una tabella
@@ -271,15 +293,15 @@ class DatabaseHelper {
       whereArgs: [whereValue],
     );
   }
-// metodo per cancellare un record da una tabella, in transazione, ritorna il numero di record cancellati
 
+// metodo per cancellare un record da una tabella, in transazione, ritorna il numero di record cancellati
   Future<int> deleteInTransaction({
     required Transaction transaction,
     required String table,
     required String byColumn,
     required int whereValue,
   }) async {
-    return txn.delete(
+    return transaction.delete(
       table,
       where: '$byColumn = ?',
       whereArgs: [whereValue],
