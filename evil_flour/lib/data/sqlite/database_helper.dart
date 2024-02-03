@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -205,5 +206,133 @@ class DatabaseHelper {
     final BriteDatabase db = await instance.streamDatabase;
     List<Map<String, dynamic>> productsWithFloursList =
         await db.rawQuery(query);
+
+    // trasformo i json ottenuti dal db in ProductItems
+    return productsWithFloursList
+        .map((json) => ProductItem.fromJsonWithFlours(json))
+        .toList();
+  }
+
+  // metodo generico per inserire un record semplice in una tabella
+  Future<int> insert(String table, Map<String, dynamic> row) async {
+    final BriteDatabase db = await instance.streamDatabase;
+    return db.insert(
+      table,
+      row,
+    );
+  }
+
+  // inserisce un prodotto semplice, senza inserire i Flour corrispondenti
+  Future<int> insertProduct(ProductItem product) async {
+    final BriteDatabase db = await instance.streamDatabase;
+    return db.insert(
+      productTable,
+      product.toJson(),
+    );
+  }
+
+  // inserisce un prodotto semplice, senza inserire i Flour corrispondenti
+  Future<int> insertFlour(Flour flour) async {
+    final BriteDatabase db = await instance.streamDatabase;
+    return db.insert(
+      flourTable,
+      flour.toJson(),
+    );
+  }
+
+  // inserisce un prodotto completo, comprensivo di farine
+  // return the id of the product
+  Future<int> insertProductWithFlours(ProductItem product) async {
+    final BriteDatabase db = await instance.streamDatabase;
+    // apro una transazione
+    return db.transaction((txn) async {
+      // Inserisco il prodotto
+      int productId = await txn.insert(productTable, product.toJson());
+      // leggo le farine associate
+      for (Flour currFlour in product.flours) {
+        // associo le farine al prodotto sul db
+
+        Map<String, Object?> row = {
+          "productId": productId,
+          "flourId": currFlour.id
+        };
+        txn.insert(productFlourTable, row);
+      }
+      return productId;
+    });
+  }
+
+  // metodo per cancellare un record da una tabella, ritorna il numero di record cancellati
+  Future<int> delete(String table, String byColumn, int whereValue) async {
+    final BriteDatabase db = await instance.streamDatabase;
+    return db.delete(
+      table,
+      where: '$byColumn = ?',
+      whereArgs: [whereValue],
+    );
+  }
+// metodo per cancellare un record da una tabella, in transazione, ritorna il numero di record cancellati
+
+  Future<int> deleteInTransaction({
+    required Transaction transaction,
+    required String table,
+    required String byColumn,
+    required int whereValue,
+  }) async {
+    return txn.delete(
+      table,
+      where: '$byColumn = ?',
+      whereArgs: [whereValue],
+    );
+  }
+
+  Future<int> deleteProduct(ProductItem product) async {
+    final BriteDatabase db = await instance.streamDatabase;
+    int recordCancellati = 0;
+    // apro una transazione
+    db.transaction((txn) async {
+      // cancello il record della tabella di raccordo
+      await deleteInTransaction(
+        transaction: txn,
+        table: productFlourTable,
+        byColumn: productId,
+        whereValue: product.id,
+      );
+      // cancello record sulla tabella product
+      recordCancellati = await deleteInTransaction(
+        transaction: txn,
+        table: productTable,
+        byColumn: productId,
+        whereValue: product.id,
+      );
+    });
+    return recordCancellati;
+  }
+
+  Future<int> deleteFlour(Flour flour) async {
+    final BriteDatabase db = await instance.streamDatabase;
+    int recordCancellati = 0;
+    // cancello il record della tabella di raccordo
+    db.transaction((txn) async {
+      await deleteInTransaction(
+        transaction: txn,
+        table: productFlourTable,
+        byColumn: flourId,
+        whereValue: flour.id,
+      );
+      // cancello record sulla tabella flour
+      recordCancellati = await deleteInTransaction(
+        transaction: txn,
+        table: productTable,
+        byColumn: flourId,
+        whereValue: flour.id,
+      );
+    });
+    return recordCancellati;
+  }
+
+  // Close the database
+  void close() {
+    _streamDatabase.close();
   }
 }
